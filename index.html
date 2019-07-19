@@ -1,5 +1,16 @@
 <!doctype html>
 
-<canvas id="canvas"></canvas>
+<div class="container">
+    <ul>
+        <strong>Settings</strong>
 
-<script src="bundle.js"></script>
+        <li><label>Rows</label><input id=rows type="text"/></li>
+        <li><label>Columns</label><input id=column type="text"/></li>
+        <li><label>Tile size</label><input id=tileSize type="text"/></li>
+        <li><input id=set type="button" value="Set"/></li>
+    </ul>
+    <canvas id="canvas"></canvas>
+</div>
+
+<link href="assets/style.css" rel="stylesheet">
+<script src="assets/bundle.js"></script>
