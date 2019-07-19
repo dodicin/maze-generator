@@ -11,7 +11,7 @@ class Canvas {
     }
 
     initCanvas(prows, pcols, ptileSize, pinstant) {
-        
+
         this.props = {
             instant: pinstant,
 
@@ -51,17 +51,17 @@ class Canvas {
         this.drawGrid();
         //this.player.draw();
 
-        if (!this.props.instant){
-            requestAnimationFrame(() => { this.update();});
-        }else{
-            this.grid.update();
-            while (this.grid.stack.length > 0){
-                this.grid.update();
-            }
-            this.drawGrid();
-        }
-        
 
+        requestAnimationFrame(() => { this.update();});
+       
+    }
+
+    generate() {
+        this.grid.update();
+        while (this.grid.stack.length > 0){
+            this.grid.update();
+        }
+        this.drawGrid();
     }
 
     drawGrid() {

@@ -12,7 +12,7 @@ class Canvas {
     }
 
     initCanvas(prows, pcols, ptileSize, pinstant) {
-        
+
         this.props = {
             instant: pinstant,
 
@@ -52,17 +52,17 @@ class Canvas {
         this.drawGrid();
         //this.player.draw();
 
-        if (!this.props.instant){
-            requestAnimationFrame(() => { this.update();});
-        }else{
-            this.grid.update();
-            while (this.grid.stack.length > 0){
-                this.grid.update();
-            }
-            this.drawGrid();
-        }
-        
 
+        requestAnimationFrame(() => { this.update();});
+       
+    }
+
+    generate() {
+        this.grid.update();
+        while (this.grid.stack.length > 0){
+            this.grid.update();
+        }
+        this.drawGrid();
     }
 
     drawGrid() {
@@ -256,9 +256,9 @@ const Canvas = require("./canvas");
     instant = document.getElementById('instant');
     buttonSet = document.getElementById('set');
 
-    default_rows = 3;
-    default_cols = 3;
-    default_tile = 30;
+    default_rows = 10;
+    default_cols = 10;
+    default_tile = 20;
 
     rows.value = default_rows;
     cols.value = default_cols;
@@ -270,7 +270,7 @@ const Canvas = require("./canvas");
     buttonSet.addEventListener('click',function(){
         cvs.initCanvas(parseInt(rows.value), parseInt(cols.value), parseInt(tileSize.value), instant.checked);
         if (instant.checked){
-            cvs.update();
+            cvs.generate();
         }
     })
 
