@@ -9,40 +9,39 @@ class Canvas {
     constructor() {
         this.canvas = document.getElementById("canvas");
         this.ctx = this.canvas.getContext("2d");
+    }
+
+    initCanvas(prows, pcols, ptileSize) {
+        
         this.props = {
+            cols: pcols,
+            rows: prows,
+            tileSize: ptileSize,
+
             playerColor: "rgb(0,0,0)",
             exitColor: "rgb(255,255,255)",
-
-            cols: 20,
-            rows: 20,
-
-            tileSize: 30,
-            wallSize: 2,
             gridBackgroundColor: "rgba(0, 0, 0, 0.5)",
             wallsColor: "#222A33",
-            currentCellColor: "rgb(227,227,227,125)",
-            visitedCellColor: "rgb(197,174,204,125)",
+            currentCellColor: "rgb(197,174,204,125)",
+            visitedCellColor: "rgb(227,227,227,125)",
         }
 
         this.grid = new Grid(this.props.cols, this.props.rows);
+        window.addEventListener("load", () => { this.update(); } );
         //this.player = new Player();
 
-        this.initCanvas();
-
-        window.addEventListener("load", () => { this.update(); } );
-    }
-
-    initCanvas() {
         this.canvas.width = this.grid.cols*this.props.tileSize;
         this.canvas.height = this.grid.rows*this.props.tileSize;
         this.ctx.translate(0.5, 0.5);
         this.ctx.lineWidth = 2;
-    }
 
-    update() {
         this.ctx.fillStyle = this.props.wallsColor;
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
+        this.ctx.strokeStyle = this.props.wallsColor;
+    }
+
+    update() {
         // Movement
         //this.player.move(this.input.getHorizontal(), this.input.getVertical());
 
@@ -52,7 +51,8 @@ class Canvas {
         this.drawGrid();
         //this.player.draw();
 
-        requestAnimationFrame(() => { this.update(); });
+        requestAnimationFrame(() => { this.update();});
+
     }
 
     drawGrid() {
@@ -64,13 +64,12 @@ class Canvas {
 
     drawCell(cell) {
         var tileSize = this.props.tileSize;
-        var x = cell.i*tileSize;
-        var y = cell.j*tileSize;
+        var x = cell.j*tileSize;
+        var y = cell.i*tileSize;
 
         var walls = cell.walls;
 
         this.ctx.beginPath();
-        this.ctx.strokeStyle = this.props.wallsColor;
 
         if ((walls & Cell.walls.TOP) > 0) {
             this.ctx.moveTo(x, y);
@@ -92,7 +91,7 @@ class Canvas {
             this.ctx.lineTo(x, y);
             this.ctx.stroke();
         }
-
+        
         if (cell.visited) {
             this.ctx.fillStyle = this.props.visitedCellColor;
             this.ctx.fillRect(x-0.5, y-0.5, tileSize, tileSize);
@@ -103,6 +102,7 @@ class Canvas {
             this.ctx.fillRect(x-0.5, y-0.5, tileSize, tileSize);
         }
     }
+    
 }
 
 module.exports = Canvas;
@@ -141,29 +141,29 @@ class Grid {
                 this.cells.push(cell);
             }
         }
-
+        
         this.current = this.cells[0];
         this.dummy = new Cell(-1, -1);
         this.dummy.visited = true;
     }
 
-    getCell(x, y){
-        if (x < 0 || x > this.rows-1 || y < 0 || y > this.cols-1) {
+    getCell(i, j){
+        if (i < 0 || i > this.rows-1 || j < 0 || j > this.cols-1) {
             return this.dummy;
         }else{
-            return this.cells[x*this.rows + y];
+            return this.cells[i*this.cols + j];
         }
     }
 
     getNeighbor(cell) {
-        let x = cell.i;
-        let y = cell.j;
+        let i = cell.i;
+        let j = cell.j;
 
-        let neigh = {
-            top:    this.getCell(x  , y-1),
-            right:  this.getCell(x+1, y),
-            bottom: this.getCell(x  , y+1),
-            left:   this.getCell(x-1, y),
+        var neigh = {
+            top:    this.getCell(i-1, j),
+            right:  this.getCell(i  , j+1),
+            bottom: this.getCell(i+1, j),
+            left:   this.getCell(i  , j-1),
         }
 
         let unvisited = [];
@@ -182,9 +182,14 @@ class Grid {
     }
 
     removeWall(target) {
-        if (target.i == this.current.i) {
+
+        console.log("Removing wall");
+        console.log(JSON.stringify(this.current));
+        console.log(JSON.stringify(target));
+
+        if (target.j == this.current.j) {
             // Remove vertical wall
-            let orientation = this.current.j - target.j;
+            let orientation = this.current.i - target.i;
             if (orientation == 1) {
                 // Remove top
                 this.current.walls ^= Cell.walls.TOP;
@@ -197,7 +202,7 @@ class Grid {
 
         }else{
             // Remove horizontal wall
-            let orientation = this.current.i - target.i;
+            let orientation = this.current.j - target.j;
             if (orientation == 1) {
                 // Remove left
                 this.current.walls ^= Cell.walls.LEFT;
@@ -208,13 +213,17 @@ class Grid {
                 target.walls ^= Cell.walls.LEFT;
             }
         }
+
+        console.log("After removal");
+        console.log(JSON.stringify(this.current));
+        console.log(JSON.stringify(target));
         
     }
 
     update() {
-        this.current.visited = true;
         let next = this.getNeighbor(this.current);
 
+        this.current.visited = true;
         if(next) {
             this.stack.push(this.current);
 
@@ -239,6 +248,26 @@ const Canvas = require("./canvas");
 
     window.requestAnimationFrame = requestAnimationFrame;
 
-    let cvs = new Canvas();
+    rows = document.getElementById('rows');
+    cols = document.getElementById('cols');
+    tileSize = document.getElementById('tileSize');
+    buttonSet = document.getElementById('set');
+
+    default_rows = 3;
+    default_cols = 3;
+    default_tile = 30;
+
+    rows.value = default_rows;
+    cols.value = default_cols;
+    tileSize.value = default_tile;
+
+    var cvs = new Canvas();
+    cvs.initCanvas(rows.value, cols.value, tileSize.value);
+
+    buttonSet.addEventListener('click',function(){
+        cvs.initCanvas(rows.value, cols.value, tileSize.value);
+    })
+
+    
 })();
 },{"./canvas":1}]},{},[4]);

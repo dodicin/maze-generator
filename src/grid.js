@@ -14,29 +14,29 @@ class Grid {
                 this.cells.push(cell);
             }
         }
-
+        
         this.current = this.cells[0];
         this.dummy = new Cell(-1, -1);
         this.dummy.visited = true;
     }
 
-    getCell(x, y){
-        if (x < 0 || x > this.rows-1 || y < 0 || y > this.cols-1) {
+    getCell(i, j){
+        if (i < 0 || i > this.rows-1 || j < 0 || j > this.cols-1) {
             return this.dummy;
         }else{
-            return this.cells[x*this.rows + y];
+            return this.cells[i*this.cols + j];
         }
     }
 
     getNeighbor(cell) {
-        let x = cell.i;
-        let y = cell.j;
+        let i = cell.i;
+        let j = cell.j;
 
-        let neigh = {
-            top:    this.getCell(x  , y-1),
-            right:  this.getCell(x+1, y),
-            bottom: this.getCell(x  , y+1),
-            left:   this.getCell(x-1, y),
+        var neigh = {
+            top:    this.getCell(i-1, j),
+            right:  this.getCell(i  , j+1),
+            bottom: this.getCell(i+1, j),
+            left:   this.getCell(i  , j-1),
         }
 
         let unvisited = [];
@@ -55,9 +55,14 @@ class Grid {
     }
 
     removeWall(target) {
-        if (target.i == this.current.i) {
+
+        console.log("Removing wall");
+        console.log(JSON.stringify(this.current));
+        console.log(JSON.stringify(target));
+
+        if (target.j == this.current.j) {
             // Remove vertical wall
-            let orientation = this.current.j - target.j;
+            let orientation = this.current.i - target.i;
             if (orientation == 1) {
                 // Remove top
                 this.current.walls ^= Cell.walls.TOP;
@@ -70,7 +75,7 @@ class Grid {
 
         }else{
             // Remove horizontal wall
-            let orientation = this.current.i - target.i;
+            let orientation = this.current.j - target.j;
             if (orientation == 1) {
                 // Remove left
                 this.current.walls ^= Cell.walls.LEFT;
@@ -81,13 +86,17 @@ class Grid {
                 target.walls ^= Cell.walls.LEFT;
             }
         }
+
+        console.log("After removal");
+        console.log(JSON.stringify(this.current));
+        console.log(JSON.stringify(target));
         
     }
 
     update() {
-        this.current.visited = true;
         let next = this.getNeighbor(this.current);
 
+        this.current.visited = true;
         if(next) {
             this.stack.push(this.current);
 
