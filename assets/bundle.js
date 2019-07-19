@@ -262,10 +262,10 @@ const Canvas = require("./canvas");
     tileSize.value = default_tile;
 
     var cvs = new Canvas();
-    cvs.initCanvas(rows.value, cols.value, tileSize.value);
+    cvs.initCanvas(parseInt(rows.value), parseInt(cols.value), parseInt(tileSize.value));
 
     buttonSet.addEventListener('click',function(){
-        cvs.initCanvas(rows.value, cols.value, tileSize.value);
+        cvs.initCanvas(parseInt(rows.value), parseInt(cols.value), parseInt(tileSize.value));
     })
 
     
