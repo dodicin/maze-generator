@@ -10,9 +10,11 @@ class Canvas {
         this.ctx = this.canvas.getContext("2d");
     }
 
-    initCanvas(prows, pcols, ptileSize) {
+    initCanvas(prows, pcols, ptileSize, pinstant) {
         
         this.props = {
+            instant: pinstant,
+
             cols: pcols,
             rows: prows,
             tileSize: ptileSize,
@@ -26,7 +28,6 @@ class Canvas {
         }
 
         this.grid = new Grid(this.props.cols, this.props.rows);
-        window.addEventListener("load", () => { this.update(); } );
         //this.player = new Player();
 
         this.canvas.width = this.grid.cols*this.props.tileSize;
@@ -50,7 +51,16 @@ class Canvas {
         this.drawGrid();
         //this.player.draw();
 
-        requestAnimationFrame(() => { this.update();});
+        if (!this.props.instant){
+            requestAnimationFrame(() => { this.update();});
+        }else{
+            this.grid.update();
+            while (this.grid.stack.length > 0){
+                this.grid.update();
+            }
+            this.drawGrid();
+        }
+        
 
     }
 

@@ -56,10 +56,6 @@ class Grid {
 
     removeWall(target) {
 
-        console.log("Removing wall");
-        console.log(JSON.stringify(this.current));
-        console.log(JSON.stringify(target));
-
         if (target.j == this.current.j) {
             // Remove vertical wall
             let orientation = this.current.i - target.i;
@@ -86,10 +82,6 @@ class Grid {
                 target.walls ^= Cell.walls.LEFT;
             }
         }
-
-        console.log("After removal");
-        console.log(JSON.stringify(this.current));
-        console.log(JSON.stringify(target));
         
     }
 

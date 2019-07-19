@@ -11,6 +11,7 @@ const Canvas = require("./canvas");
     rows = document.getElementById('rows');
     cols = document.getElementById('cols');
     tileSize = document.getElementById('tileSize');
+    instant = document.getElementById('instant');
     buttonSet = document.getElementById('set');
 
     default_rows = 3;
@@ -22,11 +23,15 @@ const Canvas = require("./canvas");
     tileSize.value = default_tile;
 
     var cvs = new Canvas();
-    cvs.initCanvas(parseInt(rows.value), parseInt(cols.value), parseInt(tileSize.value));
+    cvs.initCanvas(parseInt(rows.value), parseInt(cols.value), parseInt(tileSize.value), instant.checked);
 
     buttonSet.addEventListener('click',function(){
-        cvs.initCanvas(parseInt(rows.value), parseInt(cols.value), parseInt(tileSize.value));
+        cvs.initCanvas(parseInt(rows.value), parseInt(cols.value), parseInt(tileSize.value), instant.checked);
+        if (instant.checked){
+            cvs.update();
+        }
     })
 
-    
+    window.addEventListener("load", () => { cvs.update(); } );
+
 })();

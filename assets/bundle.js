@@ -11,9 +11,11 @@ class Canvas {
         this.ctx = this.canvas.getContext("2d");
     }
 
-    initCanvas(prows, pcols, ptileSize) {
+    initCanvas(prows, pcols, ptileSize, pinstant) {
         
         this.props = {
+            instant: pinstant,
+
             cols: pcols,
             rows: prows,
             tileSize: ptileSize,
@@ -27,7 +29,6 @@ class Canvas {
         }
 
         this.grid = new Grid(this.props.cols, this.props.rows);
-        window.addEventListener("load", () => { this.update(); } );
         //this.player = new Player();
 
         this.canvas.width = this.grid.cols*this.props.tileSize;
@@ -51,7 +52,16 @@ class Canvas {
         this.drawGrid();
         //this.player.draw();
 
-        requestAnimationFrame(() => { this.update();});
+        if (!this.props.instant){
+            requestAnimationFrame(() => { this.update();});
+        }else{
+            this.grid.update();
+            while (this.grid.stack.length > 0){
+                this.grid.update();
+            }
+            this.drawGrid();
+        }
+        
 
     }
 
@@ -183,10 +193,6 @@ class Grid {
 
     removeWall(target) {
 
-        console.log("Removing wall");
-        console.log(JSON.stringify(this.current));
-        console.log(JSON.stringify(target));
-
         if (target.j == this.current.j) {
             // Remove vertical wall
             let orientation = this.current.i - target.i;
@@ -213,10 +219,6 @@ class Grid {
                 target.walls ^= Cell.walls.LEFT;
             }
         }
-
-        console.log("After removal");
-        console.log(JSON.stringify(this.current));
-        console.log(JSON.stringify(target));
         
     }
 
@@ -251,6 +253,7 @@ const Canvas = require("./canvas");
     rows = document.getElementById('rows');
     cols = document.getElementById('cols');
     tileSize = document.getElementById('tileSize');
+    instant = document.getElementById('instant');
     buttonSet = document.getElementById('set');
 
     default_rows = 3;
@@ -262,12 +265,16 @@ const Canvas = require("./canvas");
     tileSize.value = default_tile;
 
     var cvs = new Canvas();
-    cvs.initCanvas(parseInt(rows.value), parseInt(cols.value), parseInt(tileSize.value));
+    cvs.initCanvas(parseInt(rows.value), parseInt(cols.value), parseInt(tileSize.value), instant.checked);
 
     buttonSet.addEventListener('click',function(){
-        cvs.initCanvas(parseInt(rows.value), parseInt(cols.value), parseInt(tileSize.value));
+        cvs.initCanvas(parseInt(rows.value), parseInt(cols.value), parseInt(tileSize.value), instant.checked);
+        if (instant.checked){
+            cvs.update();
+        }
     })
 
-    
+    window.addEventListener("load", () => { cvs.update(); } );
+
 })();
 },{"./canvas":1}]},{},[4]);

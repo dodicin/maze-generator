@@ -33,7 +33,7 @@ label {
     padding: 1vh;
 }
 
-input {
+input[type=text], input[type=button]{
     width: 50%;
     font-weight: bold;
     text-align: center;
