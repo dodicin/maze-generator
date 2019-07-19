@@ -14,8 +14,8 @@ const Canvas = require("./canvas");
     instant = document.getElementById('instant');
     buttonSet = document.getElementById('set');
 
-    default_rows = 10;
-    default_cols = 10;
+    default_rows = 20;
+    default_cols = 20;
     default_tile = 20;
 
     rows.value = default_rows;
