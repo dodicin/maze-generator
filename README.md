@@ -6,6 +6,8 @@ A Javascript maze generator using depth-first search with a recursive backtracke
   <img  src="example.gif">
 </p>
 
+Live [demo](https://dodicin.github.io/maze-generator)
+
 #
 ## Structure
 The main classes are kept under the `\src` folder.
