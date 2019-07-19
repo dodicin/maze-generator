@@ -2,7 +2,9 @@
 
 A Javascript maze generator using depth-first search with a recursive backtracker (it just means it uses a stack!). Detailed info on the algorithm [here](https://en.wikipedia.org/wiki/Maze_generation_algorithm).
 
-![](example.gif)
+<p align="center">
+  <img  src="example.gif">
+</p>
 
 #
 ## Structure
