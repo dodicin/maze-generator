@@ -33,7 +33,7 @@ class Canvas {
 
         this.canvas.width = this.grid.cols*this.props.tileSize;
         this.canvas.height = this.grid.rows*this.props.tileSize;
-        this.ctx.translate(0.5, 0.5);
+        //this.ctx.translate(0.5, 0.5);
         this.ctx.lineWidth = 2;
 
         this.ctx.fillStyle = this.props.wallsColor;
@@ -87,6 +87,13 @@ class Canvas {
             this.ctx.lineTo(x+tileSize, y);
             this.ctx.stroke();
         }
+        if ((walls & defaultWalls.LEFT) > 0) {
+            this.ctx.moveTo(x, y+tileSize);
+            this.ctx.lineTo(x, y);
+            this.ctx.stroke();
+        }
+        /* 
+        // Drawing left and top walls is enough to draw the whole maze
         if ((walls & defaultWalls.RIGHT) > 0) {
             this.ctx.moveTo(x+tileSize, y);
             this.ctx.lineTo(x+tileSize, y+tileSize);
@@ -96,21 +103,16 @@ class Canvas {
             this.ctx.moveTo(x+tileSize, y+tileSize);
             this.ctx.lineTo(x, y+tileSize);
             this.ctx.stroke();
-        }
-        if ((walls & defaultWalls.LEFT) > 0) {
-            this.ctx.moveTo(x, y+tileSize);
-            this.ctx.lineTo(x, y);
-            this.ctx.stroke();
-        }
+        } */
         
         if (cell.visited) {
             this.ctx.fillStyle = this.props.visitedCellColor;
-            this.ctx.fillRect(x-0.5, y-0.5, tileSize, tileSize);
+            this.ctx.fillRect(x, y, tileSize, tileSize);
         }
 
         if (cell == this.grid.current) {
             this.ctx.fillStyle = this.props.currentCellColor;
-            this.ctx.fillRect(x-0.5, y-0.5, tileSize, tileSize);
+            this.ctx.fillRect(x-0.5, y-0.5, tileSize+0.5, tileSize+0.5);
         }
     }
     
