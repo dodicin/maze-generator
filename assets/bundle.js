@@ -78,25 +78,26 @@ class Canvas {
         var y = cell.i*tileSize;
 
         var walls = cell.walls;
+        var defaultWalls = cell.defaultWalls;
 
         this.ctx.beginPath();
 
-        if ((walls & Cell.walls.TOP) > 0) {
+        if ((walls & defaultWalls.TOP) > 0) {
             this.ctx.moveTo(x, y);
             this.ctx.lineTo(x+tileSize, y);
             this.ctx.stroke();
         }
-        if ((walls & Cell.walls.RIGHT) > 0) {
+        if ((walls & defaultWalls.RIGHT) > 0) {
             this.ctx.moveTo(x+tileSize, y);
             this.ctx.lineTo(x+tileSize, y+tileSize);
             this.ctx.stroke();
         }
-        if ((walls & Cell.walls.BOTTOM) > 0) {
+        if ((walls & defaultWalls.BOTTOM) > 0) {
             this.ctx.moveTo(x+tileSize, y+tileSize);
             this.ctx.lineTo(x, y+tileSize);
             this.ctx.stroke();
         }
-        if ((walls & Cell.walls.LEFT) > 0) {
+        if ((walls & defaultWalls.LEFT) > 0) {
             this.ctx.moveTo(x, y+tileSize);
             this.ctx.lineTo(x, y);
             this.ctx.stroke();
@@ -123,13 +124,13 @@ class Cell {
         this.j = j;
         this.walls = 0b1111;
         this.visited = false;
-    }
 
-    static walls = {
-        TOP:    0b1000,
-        RIGHT:  0b0100,
-        BOTTOM: 0b0010,
-        LEFT:   0b0001
+        this.defaultWalls = {
+            TOP:    0b1000,
+            RIGHT:  0b0100,
+            BOTTOM: 0b0010,
+            LEFT:   0b0001
+        }
     }
 }
 
@@ -193,17 +194,19 @@ class Grid {
 
     removeWall(target) {
 
+        let defaultWalls = target.defaultWalls;
+
         if (target.j == this.current.j) {
             // Remove vertical wall
             let orientation = this.current.i - target.i;
             if (orientation == 1) {
                 // Remove top
-                this.current.walls ^= Cell.walls.TOP;
-                target.walls ^= Cell.walls.BOTTOM;
+                this.current.walls ^= defaultWalls.TOP;
+                target.walls ^= defaultWalls.BOTTOM;
             }else{
                 // Remove bottom
-                this.current.walls ^= Cell.walls.BOTTOM;
-                target.walls ^= Cell.walls.TOP;
+                this.current.walls ^= defaultWalls.BOTTOM;
+                target.walls ^= defaultWalls.TOP;
             }
 
         }else{
@@ -211,12 +214,12 @@ class Grid {
             let orientation = this.current.j - target.j;
             if (orientation == 1) {
                 // Remove left
-                this.current.walls ^= Cell.walls.LEFT;
-                target.walls ^= Cell.walls.RIGHT;
+                this.current.walls ^= defaultWalls.LEFT;
+                target.walls ^= defaultWalls.RIGHT;
             }else{
                 // Remove right
-                this.current.walls ^= Cell.walls.RIGHT;
-                target.walls ^= Cell.walls.LEFT;
+                this.current.walls ^= defaultWalls.RIGHT;
+                target.walls ^= defaultWalls.LEFT;
             }
         }
         
@@ -256,8 +259,8 @@ const Canvas = require("./canvas");
     instant = document.getElementById('instant');
     buttonSet = document.getElementById('set');
 
-    default_rows = 10;
-    default_cols = 10;
+    default_rows = 20;
+    default_cols = 20;
     default_tile = 20;
 
     rows.value = default_rows;

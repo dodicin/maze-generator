@@ -56,17 +56,19 @@ class Grid {
 
     removeWall(target) {
 
+        let defaultWalls = target.defaultWalls;
+
         if (target.j == this.current.j) {
             // Remove vertical wall
             let orientation = this.current.i - target.i;
             if (orientation == 1) {
                 // Remove top
-                this.current.walls ^= Cell.walls.TOP;
-                target.walls ^= Cell.walls.BOTTOM;
+                this.current.walls ^= defaultWalls.TOP;
+                target.walls ^= defaultWalls.BOTTOM;
             }else{
                 // Remove bottom
-                this.current.walls ^= Cell.walls.BOTTOM;
-                target.walls ^= Cell.walls.TOP;
+                this.current.walls ^= defaultWalls.BOTTOM;
+                target.walls ^= defaultWalls.TOP;
             }
 
         }else{
@@ -74,12 +76,12 @@ class Grid {
             let orientation = this.current.j - target.j;
             if (orientation == 1) {
                 // Remove left
-                this.current.walls ^= Cell.walls.LEFT;
-                target.walls ^= Cell.walls.RIGHT;
+                this.current.walls ^= defaultWalls.LEFT;
+                target.walls ^= defaultWalls.RIGHT;
             }else{
                 // Remove right
-                this.current.walls ^= Cell.walls.RIGHT;
-                target.walls ^= Cell.walls.LEFT;
+                this.current.walls ^= defaultWalls.RIGHT;
+                target.walls ^= defaultWalls.LEFT;
             }
         }
         

@@ -77,25 +77,26 @@ class Canvas {
         var y = cell.i*tileSize;
 
         var walls = cell.walls;
+        var defaultWalls = cell.defaultWalls;
 
         this.ctx.beginPath();
 
-        if ((walls & Cell.walls.TOP) > 0) {
+        if ((walls & defaultWalls.TOP) > 0) {
             this.ctx.moveTo(x, y);
             this.ctx.lineTo(x+tileSize, y);
             this.ctx.stroke();
         }
-        if ((walls & Cell.walls.RIGHT) > 0) {
+        if ((walls & defaultWalls.RIGHT) > 0) {
             this.ctx.moveTo(x+tileSize, y);
             this.ctx.lineTo(x+tileSize, y+tileSize);
             this.ctx.stroke();
         }
-        if ((walls & Cell.walls.BOTTOM) > 0) {
+        if ((walls & defaultWalls.BOTTOM) > 0) {
             this.ctx.moveTo(x+tileSize, y+tileSize);
             this.ctx.lineTo(x, y+tileSize);
             this.ctx.stroke();
         }
-        if ((walls & Cell.walls.LEFT) > 0) {
+        if ((walls & defaultWalls.LEFT) > 0) {
             this.ctx.moveTo(x, y+tileSize);
             this.ctx.lineTo(x, y);
             this.ctx.stroke();
