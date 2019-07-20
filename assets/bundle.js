@@ -112,7 +112,7 @@ class Canvas {
 
         if (cell == this.grid.current) {
             this.ctx.fillStyle = this.props.currentCellColor;
-            this.ctx.fillRect(x-0.5, y-0.5, tileSize+0.5, tileSize+0.5);
+            this.ctx.fillRect(x, y, tileSize, tileSize);
         }
     }
     
