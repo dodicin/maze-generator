@@ -6,7 +6,8 @@ A Javascript maze generator using depth-first search with a recursive backtracke
   <img  src="example.gif">
 </p>
 
-Live [demo](https://dodicin.github.io/maze-generator)
+
+#### [Live demo](https://nhabbash.github.io/maze-generator)
 
 #
 ## Structure
@@ -21,4 +22,4 @@ To serve them in `\assets\bundle.js`, `browserify` has been used, so for editing
 #
 ## Author
 
-* **Nassim Habbash** - [dodicin](https://github.com/dodicin)
+* **Nassim Habbash** - [nhabbash](https://github.com/nhabbash)
